@@ -1,13 +1,13 @@
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { promises as fsPromises } from "fs";
-import { throws } from "assert";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const file = join(__dirname, "files", "fresh.txt");
 
-const create = async (content = "I am fresh and young") => {
+const create = async () => {
+  const file = join(__dirname, "files", "fresh.txt");
+  const content = "I am fresh and young";
   try {
     const result = await fsPromises.access(file);
     if (result === undefined) {
