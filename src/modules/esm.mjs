@@ -7,7 +7,16 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-process.env.NODE_NO_WARNINGS = true;
+
+//hide ExperimentalWarning
+const originalWarn = process.emitWarning;
+process.emitWarning = (warning, type, code, ...args) => {
+  if (type === "ExperimentalWarning" && warning.includes("Importing JSON modules is an experimental feature")) {
+    return;
+  }
+  originalWarn.call(process, warning, type, code, ...args);
+};
+
 const random = Math.random();
 
 let unknownObject;
