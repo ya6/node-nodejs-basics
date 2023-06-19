@@ -13,12 +13,14 @@ const performCalculations = async () => {
   const results = [];
   let count = 1;
   let done_count = 0;
+  const start_data = 9;
+
   try {
     while (count <= host_cpus) {
       await fsPromises.cp(join(__dirname, "worker.js"), join(__dirname, `worker_${count}.js`));
       workers[`${count}`] = new Worker(join(__dirname, `worker_${count}.js`));
 
-      workers[`${count}`].postMessage(9 + count);
+      workers[`${count}`].postMessage(start_data + count);
 
       workers[`${count}`].on("message", function (message) {
         results.push({ data: message, status: "resolved", id: this.threadId });
@@ -26,7 +28,7 @@ const performCalculations = async () => {
       });
 
       workers[`${count}`].on("error", (error) => {
-        results.push({ data: null, status: "error" });
+        results.push({ data: null, status: "error", id: this.threadId });
         this.terminate();
       });
 
